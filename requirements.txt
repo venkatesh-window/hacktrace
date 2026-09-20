@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+httpx
+xgboost
+shap
+scikit-learn
+pandas
+numpy
+scipy
+networkx

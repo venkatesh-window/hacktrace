@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*$py.class
+data/raw/
+.env
+.venv
+env/
+venv/
+dataset/PS_20174392719_1491204439457_log.csv
+node_modules/
+dist/
+.DS_Store

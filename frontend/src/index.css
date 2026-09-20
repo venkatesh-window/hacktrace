@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import 'maplibre-gl/dist/maplibre-gl.css';
+@import '@xyflow/react/dist/style.css';
+
+:root {
+  /* Premium Light Theme Palette */
+  --bg-primary: #f4f6fb; /* Soft cool-gray canvas */
+  --bg-surface: #ffffff; /* Crisp white for elevated panels */
+  --bg-hover: #ebf0f7;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  
+  --border-color: rgba(15, 23, 42, 0.08); /* Hairline borders */
+  
+  /* Accent Palette */
+  --primary-color: #4f46e5; /* Electric Indigo */
+  --primary-hover: #4338ca;
+  --primary-glow: 0 0 24px rgba(79, 70, 229, 0.25);
+  
+  --accent-color: #3b82f6; /* Blue */
+  --accent-glow: 0 0 24px rgba(59, 130, 246, 0.35);
+  
+  /* Status Colors */
+  --success-color: #10b981; /* Emerald */
+  --success-bg: #d1fae5;
+  --success-glow: 0 0 24px rgba(16, 185, 129, 0.35);
+  
+  --warning-color: #f59e0b; /* Amber */
+  --warning-bg: #fef3c7;
+  --warning-glow: 0 0 24px rgba(245, 158, 11, 0.35);
+  
+  --danger-color: #ef4444; /* Strong Red */
+  --danger-bg: #fee2e2;
+  --danger-glow: 0 0 24px rgba(239, 68, 68, 0.35);
+  
+  /* Soft colored shadows instead of generic dark grays */
+  --shadow-sm: 0 1px 2px 0 rgba(79, 70, 229, 0.05);
+  --shadow-md: 0 4px 12px rgba(79, 70, 229, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 32px rgba(79, 70, 229, 0.08), 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ambient dotted background for the app */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  background-image: radial-gradient(circle, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+  background-color: rgba(15, 23, 42, 0.03);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Layout Utilities */
+.sidebar {
+  width: 260px;
+  background-color: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  box-shadow: var(--shadow-md);
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.topbar {
+  height: 64px;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 10;
+}
+
+.page-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px;
+}
+
+.page-container.no-padding {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Card Styles */
+.card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:hover {
+  background-color: var(--bg-hover);
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  box-shadow: var(--primary-glow);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 0 32px rgba(79, 70, 229, 0.4);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-success {
+  background-color: var(--success-bg);
+  color: var(--success-color);
+}
+.badge-warning {
+  background-color: var(--warning-bg);
+  color: var(--warning-color);
+}
+.badge-danger {
+  background-color: var(--danger-bg);
+  color: var(--danger-color);
+}
+
+/* Animations */
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+.pulse-marker-core {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  border: 2px solid white;
+}
+
+.pulse-marker-ring {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50%;
+  z-index: 1;
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.pulse-marker-ring-2 {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50%;
+  z-index: 1;
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  animation-delay: 0.6s;
+}
+
+.marker-danger.pulse-marker-core { background-color: var(--danger-color); box-shadow: var(--danger-glow); }
+.marker-danger .pulse-marker-ring, .marker-danger .pulse-marker-ring-2 { background-color: rgba(239, 68, 68, 0.4); }
+
+.marker-warning.pulse-marker-core { background-color: var(--warning-color); box-shadow: var(--warning-glow); }
+.marker-warning .pulse-marker-ring, .marker-warning .pulse-marker-ring-2 { background-color: rgba(245, 158, 11, 0.4); }
+
+.marker-primary.pulse-marker-core { background-color: var(--primary-color); box-shadow: var(--primary-glow); }
+.marker-primary .pulse-marker-ring, .marker-primary .pulse-marker-ring-2 { background-color: rgba(79, 70, 229, 0.4); }
+
+.map-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.react-flow__node {
+  border-radius: 8px;
+}

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T.R.A.C.E. — Webhook Trigger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    :root {
+      --font-pixel: 'Pixelify Sans', sans-serif;
+      --font-mono-pixel: 'Silkscreen', monospace;
+      --font-retro: 'Press Start 2P', monospace;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-dark: #312e81;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-pixel);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      background-image: 
+        radial-gradient(800px circle at 50% 0%, rgba(79, 70, 229, 0.06) 0%, transparent 70%),
+        radial-gradient(600px circle at 85% 95%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+      color: var(--text-main);
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    /* Professional Light Card */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 
+        0 20px 35px -10px rgba(15, 23, 42, 0.08),
+        0 1px 3px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+      transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .card:hover {
+      box-shadow: 
+        0 25px 45px -12px rgba(15, 23, 42, 0.12),
+        0 1px 3px rgba(0, 0, 0, 0.04);
+      border-color: #cbd5e1;
+    }
+
+    /* Top Navigation / Header */
+    .card-header {
+      padding: 16px 22px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fafafa;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono-pixel);
+      font-size: 11px;
+      line-height: 1.4;
+      color: #1e293b;
+      letter-spacing: 0.2px;
+      font-weight: 700;
+    }
+
+    .brand-icon {
+      width: 26px;
+      height: 26px;
+      min-width: 26px;
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: var(--font-retro);
+      font-size: 10px;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+    }
+
+    .badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 20px;
+      font-family: var(--font-mono-pixel);
+      font-size: 10px;
+      color: #059669;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    /* Card Body */
+    .card-body {
+      padding: 34px 30px;
+      text-align: center;
+    }
+
+    .title {
+      font-family: var(--font-pixel);
+      font-size: 25px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      font-family: var(--font-pixel);
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+
+    .subtitle strong {
+      color: #4338ca;
+      font-weight: 600;
+    }
+
+    /* Professional 3D Button (Light Theme) */
+    .btn-container {
+      margin-bottom: 12px;
+    }
+
+    .btn-3d {
+      width: 100%;
+      padding: 16px 24px;
+      font-family: var(--font-mono-pixel);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #ffffff;
+      background: linear-gradient(180deg, #4f46e5 0%, #4338ca 100%);
+      border: 1px solid #4338ca;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+      /* 3D solid extrusion shadow */
+      box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        0 6px 0 var(--primary-dark),
+        0 12px 20px -3px rgba(79, 70, 229, 0.35);
+      transform: translateY(0);
+      transition: all 0.12s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-3d:hover:not(:disabled) {
+      background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%);
+      transform: translateY(-2px);
+      box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.45),
+        0 8px 0 var(--primary-dark),
+        0 16px 24px -3px rgba(79, 70, 229, 0.45);
+    }
+
+    .btn-3d:active:not(:disabled) {
+      transform: translateY(5px);
+      box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.25),
+        0 1px 0 var(--primary-dark),
+        0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-3d:disabled {
+      background: #e2e8f0;
+      border-color: #cbd5e1;
+      color: #94a3b8;
+      box-shadow: 0 3px 0 #cbd5e1;
+      transform: translateY(3px);
+      cursor: not-allowed;
+    }
+
+    /* Minimal subtle status message */
+    .status-msg {
+      font-family: var(--font-mono-pixel);
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 14px;
+      min-height: 18px;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <div class="brand">
+          <div class="brand-icon">T</div>
+          <span>T.R.A.C.E. - Threat Routing Analysis for Cybercrime Enforcement</span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <!-- <h1 class="title">LIVE FRAUD SIMULATOR</h1>
+        <p class="subtitle">Select or enter the cybercrime complaint amount to dispatch through Razorpay's ML risk pipeline.</p> -->
+
+        <div style="margin-bottom: 20px; text-align: left;">
+          <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+            Enter the Amount (INR)
+          </label>
+          <div style="position: relative;">
+            <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-weight: 700; color: #64748b; font-size: 16px;">₹</span>
+            <input 
+              id="fraudAmount" 
+              type="number" 
+              value="25000" 
+              min="1" 
+              step="1000"
+              style="width: 100%; box-sizing: border-box; padding: 12px 14px 12px 32px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 16px; font-weight: 700; color: #1e293b; font-family: monospace; outline: none; transition: border-color 0.2s;"
+              onfocus="this.style.borderColor='#4f46e5'"
+              onblur="this.style.borderColor='#cbd5e1'"
+            />
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <button id="payBtn" class="btn-3d" onclick="triggerPayment()">
+            <span>PAY NOW</span>
+          </button>
+        </div>
+
+        <div id="status" class="status-msg">READY TO PAY</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Point this at wherever backend/main.py is running (localhost while
+    // testing, your ngrok URL if testing through the public tunnel)
+    const API_BASE = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:")
+      ? "http://localhost:8000"
+      : "https://professor-enjoyable-pucker.ngrok-free.dev";
+
+    function setStatus(msg) {
+      const el = document.getElementById("status");
+      if (el) el.textContent = msg;
+    }
+
+    function selectPreset(val) {
+      const el = document.getElementById("fraudAmount");
+      if (el) el.value = val;
+    }
+
+    async function triggerPayment() {
+      const btn = document.getElementById("payBtn");
+      if (btn) btn.disabled = true;
+      setStatus("CREATING ORDER...");
+
+      try {
+        const amountInput = document.getElementById("fraudAmount");
+        const amountVal = amountInput ? (parseInt(amountInput.value, 10) || 25000) : 25000;
+
+        const orderResp = await fetch(`${API_BASE}/create-order`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "true",
+          },
+          body: JSON.stringify({ amount: amountVal }),
+        });
+        if (!orderResp.ok) {
+          const err = await orderResp.json();
+          throw new Error(err.detail || "Failed to create order");
+        }
+        const order = await orderResp.json();
+
+        const options = {
+          key: order.key_id,
+          amount: order.amount,
+          currency: "INR",
+          name: "T.R.A.C.E. Incident Trigger",
+          description: `Simulated cybercrime transfer of ₹${(order.amount_rupees || amountVal).toLocaleString()}`,
+          order_id: order.order_id,
+          handler: function (response) {
+            setStatus("SUCCESS: PAYMENT CAPTURED // WEBHOOK FIRED!");
+            if (btn) btn.disabled = false;
+            try {
+              // Notify dashboard tab instantly in real time via BroadcastChannel!
+              const bc = new BroadcastChannel("trace_alerts_channel");
+              bc.postMessage({ type: "NEW_ALERT", amount: amountVal });
+            } catch (err) {}
+          },
+          modal: {
+            ondismiss: function () {
+              setStatus("MODAL CLOSED WITHOUT PAYMENT.");
+              if (btn) btn.disabled = false;
+            },
+          },
+          theme: { color: "#4f46e5" },
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.on("payment.failed", function (resp) {
+          setStatus("PAYMENT FAILED: " + resp.error.description);
+          if (btn) btn.disabled = false;
+        });
+        rzp.open();
+        setStatus("MODAL OPEN // ENTER TEST CARD");
+      } catch (e) {
+        setStatus("ERR: " + e.message);
+        if (btn) btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
